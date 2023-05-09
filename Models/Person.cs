@@ -4,7 +4,7 @@
     {
         public int PersonId { get; set; }
         public string Name { get; set; }
-        public virtual Passport Passport { get; set; }
+        public virtual Passport? Passport { get; set; }
 
     }
 }
