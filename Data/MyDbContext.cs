@@ -1,4 +1,5 @@
 ﻿using EntityFrameworkMappingAndDatabase.Data.Mapping;
+using EntityFrameworkMappingAndDatabase.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EntityFrameworkMappingAndDatabase.Data
@@ -10,6 +11,13 @@ namespace EntityFrameworkMappingAndDatabase.Data
         {
             Configuration = _configuration; 
         }
+
+        public DbSet<Person> Persons { get; set; }
+        public DbSet<Passport> Passports { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -17,6 +25,8 @@ namespace EntityFrameworkMappingAndDatabase.Data
             builder.ApplyConfiguration(new PassportMapping());
             builder.ApplyConfiguration(new EmployeeMapping());
             builder.ApplyConfiguration(new DepartmentMapping());
+            builder.ApplyConfiguration(new ProductMapping());
+            builder.ApplyConfiguration (new CategoryMapping());
         }
     }
 }
