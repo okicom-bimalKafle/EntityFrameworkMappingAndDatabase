@@ -1,0 +1,31 @@
+version: '3.4'
+networks:
+  demoNetwork:
+services:
+  demoappdb:
+    container_name: map_db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+     - 8002:1443
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=test@123   
+    networks:
+      - demoNetwork
+  entityframeworkmappinganddatabase:
+    container_name: map_tutorial
+    image: ${DOCKER_REGISTRY-}entityframeworkmappinganddatabase
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+        - 8080:80
+    depends_on:
+        - demoappdb
+    environment:
+        - DB_HOST=demoappdb
+        - DB_NAME=demoApp
+        - MSSQL_SA_PASSWORD=test@123
+    networks:
+        - demoNetwork
+    

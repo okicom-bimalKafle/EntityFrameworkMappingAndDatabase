@@ -1,6 +1,8 @@
 ﻿using EntityFrameworkMappingAndDatabase.Data.Mapping;
 using EntityFrameworkMappingAndDatabase.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EntityFrameworkMappingAndDatabase.Data
 {
@@ -9,7 +11,21 @@ namespace EntityFrameworkMappingAndDatabase.Data
         public readonly IConfiguration Configuration;
         public MyDbContext(DbContextOptions<MyDbContext> options, IConfiguration _configuration) : base(options)
         {
-            Configuration = _configuration; 
+            Configuration = _configuration;
+            try
+            {
+                var DatabaseCreator = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
+                if(DatabaseCreator != null )
+                {
+                    if (!DatabaseCreator.CanConnect()) DatabaseCreator.Create();
+                    if (!DatabaseCreator.HasTables()) DatabaseCreator.CreateTables();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
         }
 
         public DbSet<Person> Persons { get; set; }

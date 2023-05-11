@@ -3,7 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<MyDbContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DbContext' not found.")));
+
+
+
+
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+var dbPassword = Environment.GetEnvironmentVariable("MSSQL_SA_PASSWORD");
+var connectionString = $"Server={dbHost};Database={dbName};User Id=sa;Password={dbPassword}";
+builder.Services.AddDbContext<MyDbContext>(options=>options.UseSqlServer(connectionString));
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
